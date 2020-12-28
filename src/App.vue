@@ -5,18 +5,19 @@
       <h3 v-if="todos === null">Loading...</h3>
       <ul v-else class="list-group">
         <li class="list-group-item d-flex" v-for="todo in todos">
-          <span class="text-start" style="width: 85%">
+          <span class="text-start todo-container">
             <input @change="updateCompleted(todo.id, todo.completed)" type="checkbox" v-model="todo.completed">
             <span v-if="todo.completed" class="done">{{ todo.title }}</span>
             <span v-else>{{ todo.title }}</span>
           </span>
-          <div class="ms-auto" style="width: 15%; min-width: px">
+          <div class="ms-auto button-container">
             <button @click="editTodo(todo)" class="btn btn-sm btn-primary">Edit</button>
             <button @click="removeTodo(todo.id)" class="btn btn-sm btn-danger ms-2">x</button>
           </div>
         </li>
       </ul>
-      <form @submit="handleSubmit" class="my-2">
+      <br v-show="isUpdating" />
+      <form @submit="handleSubmit">
         <div class="form-group text-start">
           <small v-if="isUpdating" class="form-tex text-muted">Updating a todo....</small>
           <label for="title" />
@@ -127,5 +128,12 @@ input[type='checkbox'] {
 }
 .done {
   text-decoration: line-through;
+}
+.todo-container {
+  width: 85%
+}
+.button-container {
+  width: 15%;
+  min-width: 80px
 }
 </style>
