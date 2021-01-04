@@ -4,7 +4,7 @@
     <div class="col-11 col-sm-10 col-md-8 col-lg-6">
       <h3 v-if="todos === null">Loading...</h3>
       <ul v-else class="list-group">
-        <li class="list-group-item d-flex" v-for="todo in todos">
+        <li class="list-group-item d-flex align-items-center py-2" v-for="todo in todos">
           <span class="text-start todo-container">
             <input @change="updateCompleted(todo.id, todo.completed)" type="checkbox" v-model="todo.completed">
             <span v-if="todo.completed" class="done">{{ todo.title }}</span>
