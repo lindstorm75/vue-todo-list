@@ -3,19 +3,13 @@
   <div class="container d-flex justify-content-center">
     <div class="col-11 col-sm-10 col-md-8 col-lg-6">
       <h3 v-if="todos === null">Loading...</h3>
-      <ul v-else class="list-group">
-        <li class="list-group-item d-flex align-items-center py-2" v-for="todo in todos">
-          <span class="text-start todo-container">
-            <input @change="updateCompleted(todo.id, todo.completed)" type="checkbox" v-model="todo.completed">
-            <span v-if="todo.completed" class="done">{{ todo.title }}</span>
-            <span v-else>{{ todo.title }}</span>
-          </span>
-          <div class="ms-auto button-container">
-            <button @click="editTodo(todo)" class="btn btn-sm btn-primary">Edit</button>
-            <button @click="removeTodo(todo.id)" class="btn btn-sm btn-danger ms-2">x</button>
-          </div>
-        </li>
-      </ul>
+      <TodoList
+        v-else
+        :todos="todos"
+        :updateCompleted="updateCompleted"
+        :editTodo="editTodo"
+        :removeTodo="removeTodo"
+      />
       <br v-show="isUpdating" />
       <form @submit="handleSubmit">
         <div class="form-group text-start">
@@ -29,14 +23,18 @@
 </template>
 
 <script>
+import TodoList from "./components/TodoList"
 
 export default {
   name: 'App',
+  components: {
+    TodoList
+  },
   data() {
     return {
       todos: null,
       inputValue: "",
-      updating: false,
+      isUpdating: false,
       currentTodo: null
     }
   },
@@ -59,20 +57,19 @@ export default {
         body: JSON.stringify(data)
       })
     },
-    updateCompleted(id, completed) {
-      const data = { completed }
-      fetch(`https://arcane-hollows-66380.herokuapp.com/todos/${id}`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-    },
-    editTodo(todo) {
-      this.isUpdating = true
-      this.currentTodo = todo
-      this.inputValue = todo.title
+    handleSubmit(e) {
+      e.preventDefault()
+      if (this.inputValue === "") return
+      if (this.isUpdating) {
+        this.updateTodo()
+      } else {
+        this.addTodo()
+        this.todos.push({
+          title: this.inputValue,
+          completed: false
+        })
+      }
+      this.inputValue = ""
     },
     updateTodo() {
       const data = { title: this.inputValue }
@@ -87,19 +84,20 @@ export default {
       this.isUpdating = false
       this.currentTodo = null
     },
-    handleSubmit(e) {
-      e.preventDefault()
-      if (this.inputValue === "") return
-      if (this.isUpdating) {
-        this.updateTodo()
-      } else {
-        this.addTodo()
-        this.todos.push({
-          title: this.inputValue,
-          completed: false
-        })
-      }
-      this.inputValue = ""
+    updateCompleted(id, completed) {
+      const data = { completed }
+      fetch(`https://arcane-hollows-66380.herokuapp.com/todos/${id}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+    },
+    editTodo(todo) {
+      this.isUpdating = true
+      this.currentTodo = todo
+      this.inputValue = todo.title
     },
     removeTodo(id) {
       if (confirm("Are you sure?")) {
