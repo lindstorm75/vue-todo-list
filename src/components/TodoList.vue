@@ -6,7 +6,7 @@
         <span v-if="todo.completed" class="done">{{ todo.title }}</span>
         <span v-else>{{ todo.title }}</span>
       </span>
-      <TodoButton :editTodo="editTodo" :removeTodo="removeTodo" />
+      <TodoButton :todo="todo" :editTodo="editTodo" :removeTodo="removeTodo" />
     </li>
   </ul>
 </template>

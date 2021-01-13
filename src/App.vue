@@ -83,6 +83,7 @@ export default {
       this.currentTodo.title = this.inputValue
       this.isUpdating = false
       this.currentTodo = null
+      this.inputValue = ""
     },
     updateCompleted(id, completed) {
       const data = { completed }
@@ -95,6 +96,7 @@ export default {
       })
     },
     editTodo(todo) {
+      console.log(todo)
       this.isUpdating = true
       this.currentTodo = todo
       this.inputValue = todo.title
@@ -106,6 +108,9 @@ export default {
         fetch(`https://arcane-hollows-66380.herokuapp.com/todos/${id}`, {
           method: "DELETE"
         })
+        this.isUpdating = false
+        this.currentTodo = null
+        this.inputValue = ""
       } else return
     }
   }
