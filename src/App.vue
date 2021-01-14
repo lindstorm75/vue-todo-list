@@ -24,6 +24,7 @@
 
 <script>
 import TodoList from "./components/TodoList"
+import axios from "axios"
 
 export default {
   name: 'App',
@@ -39,9 +40,8 @@ export default {
     }
   },
   mounted() {
-    fetch("https://arcane-hollows-66380.herokuapp.com/todos")
-    .then(res => res.json())
-    .then(todos => this.todos = todos)
+    axios.get("https://arcane-hollows-66380.herokuapp.com/todos")
+    .then(({ data }) => this.todos = data)
   },
   methods: {
     addTodo() {
@@ -73,13 +73,7 @@ export default {
     },
     updateTodo() {
       const data = { title: this.inputValue }
-      fetch(`https://arcane-hollows-66380.herokuapp.com/todos/${this.currentTodo.id}`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
+      axios.post(`https://arcane-hollows-66380.herokuapp.com/todos/${this.currentTodo.id}`, data)
       this.currentTodo.title = this.inputValue
       this.isUpdating = false
       this.currentTodo = null
@@ -87,13 +81,7 @@ export default {
     },
     updateCompleted(id, completed) {
       const data = { completed }
-      fetch(`https://arcane-hollows-66380.herokuapp.com/todos/${id}`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
+      axios.put(`https://arcane-hollows-66380.herokuapp.com/todos/${id}`, data)
     },
     editTodo(todo) {
       console.log(todo)
@@ -105,9 +93,7 @@ export default {
       if (confirm("Are you sure?")) {
         const targetIndex = this.todos.findIndex(todo => +todo.id === +id)
         this.todos.splice(targetIndex, 1)
-        fetch(`https://arcane-hollows-66380.herokuapp.com/todos/${id}`, {
-          method: "DELETE"
-        })
+        axios.delete(`https://arcane-hollows-66380.herokuapp.com/todos/${id}`)
         this.isUpdating = false
         this.currentTodo = null
         this.inputValue = ""
