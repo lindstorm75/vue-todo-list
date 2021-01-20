@@ -84,7 +84,6 @@ export default {
       axios.put(`https://arcane-hollows-66380.herokuapp.com/todos/${id}`, data)
     },
     editTodo(todo) {
-      console.log(todo)
       this.isUpdating = true
       this.currentTodo = todo
       this.inputValue = todo.title

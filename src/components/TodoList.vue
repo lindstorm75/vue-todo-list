@@ -22,7 +22,3 @@ export default {
   props: ["todos", "updateCompleted", "editTodo", "removeTodo"]
 }
 </script>
-
-<style>
-
-</style>

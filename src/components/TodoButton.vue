@@ -11,7 +11,3 @@ export default {
   props: ["todo", "editTodo", "removeTodo"]
 }
 </script>
-
-<style>
-
-</style>
